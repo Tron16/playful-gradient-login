@@ -1,17 +1,17 @@
-
 import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  if (authStatus !== "authenticated") {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

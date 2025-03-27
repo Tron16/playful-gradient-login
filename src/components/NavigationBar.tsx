@@ -1,23 +1,34 @@
-
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { Button } from "@/components/ui/button";
 import { Sun, Info, LogOut, Brain } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "@/hooks/use-toast";
 
 const NavigationBar = () => {
-  const { logout, user } = useAuth();
+  const { signOut, user } = useAuthenticator();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate("/login");
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error logging out",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <motion.header 
+    <motion.header
       className="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm sticky top-0 z-50"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -30,26 +41,28 @@ const NavigationBar = () => {
               <Sun className="w-8 h-8 text-yellow-400 animate-spin-slow" />
               <div className="absolute inset-0 bg-yellow-300 rounded-full blur-sm opacity-30 animate-pulse"></div>
             </div>
-            <span className="text-xl font-semibold text-gray-900">Solar Scheduler</span>
+            <span className="text-xl font-semibold text-gray-900">
+              Solar Scheduler
+            </span>
           </Link>
-          
+
           <nav className="flex items-center space-x-4">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                location.pathname === "/" 
-                  ? "text-solar-accent border-b-2 border-solar-accent" 
+                location.pathname === "/"
+                  ? "text-solar-accent border-b-2 border-solar-accent"
                   : "text-gray-600 hover:text-solar-accent"
               }`}
             >
               Dashboard
             </Link>
-            
-            <Link 
-              to="/model-training" 
+
+            <Link
+              to="/model-training"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                location.pathname === "/model-training" 
-                  ? "text-solar-accent border-b-2 border-solar-accent" 
+                location.pathname === "/model-training"
+                  ? "text-solar-accent border-b-2 border-solar-accent"
                   : "text-gray-600 hover:text-solar-accent"
               }`}
             >
@@ -58,12 +71,12 @@ const NavigationBar = () => {
                 Train Model
               </span>
             </Link>
-            
-            <Link 
-              to="/how-to" 
+
+            <Link
+              to="/how-to"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                location.pathname === "/how-to" 
-                  ? "text-solar-accent border-b-2 border-solar-accent" 
+                location.pathname === "/how-to"
+                  ? "text-solar-accent border-b-2 border-solar-accent"
                   : "text-gray-600 hover:text-solar-accent"
               }`}
             >
@@ -72,11 +85,11 @@ const NavigationBar = () => {
                 How To
               </span>
             </Link>
-            
+
             <div className="border-l border-gray-200 h-6 mx-2"></div>
-            
-            <Button 
-              variant="ghost" 
+
+            <Button
+              variant="ghost"
               className="flex items-center text-gray-600 hover:text-solar-accent"
               onClick={handleLogout}
             >
