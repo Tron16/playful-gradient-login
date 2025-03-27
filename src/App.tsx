@@ -13,12 +13,6 @@ import NotFound from "./pages/NotFound";
 import ModelTraining from "./pages/ModelTraining";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-//Login
-import { Amplify } from "aws-amplify";
-import outputs from "../amplify_outputs.json";
-
-Amplify.configure(outputs);
-
 const queryClient = new QueryClient();
 
 const App = () => {
