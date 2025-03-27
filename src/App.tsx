@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,12 @@ import NotFound from "./pages/NotFound";
 import ModelTraining from "./pages/ModelTraining";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+//Login
+import { Amplify } from "aws-amplify";
+import outputs from "../amplify_outputs.json";
+
+Amplify.configure(outputs);
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -26,10 +31,34 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/how-to" element={<ProtectedRoute><HowTo /></ProtectedRoute>} />
-            <Route path="/model-training" element={<ProtectedRoute><ModelTraining /></ProtectedRoute>} />
+            <Route
+              path="/login"
+              element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+            />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/how-to"
+              element={
+                <ProtectedRoute>
+                  <HowTo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/model-training"
+              element={
+                <ProtectedRoute>
+                  <ModelTraining />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
