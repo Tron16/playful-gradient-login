@@ -15,7 +15,6 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@amplify": path.resolve(__dirname, "./amplify_outputs.json"),
     },
   },
 }));
